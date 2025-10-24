@@ -1,0 +1,1478 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pocket Classroom🌿</title>
+
+    <!-- Fonts: Googleapis + Gstatic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@700&display=swap"
+        rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/previews/023/639/810/non_2x/green-leaf-icon-free-png.png" >
+    <!-- Bootstrap + Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 Free -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
+
+    <style>
+        /* Visual tokens */
+        :root {
+            --olive: #6b8b00;
+            --olive-rgba: 107, 139, 0;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --content-bg: rgba(0, 0, 0, 0.95);
+            --text-light: #efe9e6;
+            --gap: 18px;
+            --btn-radius: 999px;
+        }
+
+        /* base */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            background: #000;
+            color: var(--text-light);
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* NAVBAR */
+        .navbar-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(6px) saturate(1.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            z-index: 999;
+        }
+
+        .navbar-container {
+            padding-left: 32px;
+            /* slightly increased spacing from corner per request */
+            padding-right: 32px;
+        }
+
+        .navbar-brand {
+            font-family: 'Merriweather', serif;
+            font-size: 1.05rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .logo-leaf {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--olive), #8fb000);
+            box-shadow: 0 6px 18px rgba(var(--olive-rgba), 0.14);
+        }
+
+        /* nav links: default olive, hover/active white */
+        .navbar-glass .navbar-nav {
+            gap: 8px;
+            align-items: center;
+        }
+
+        .navbar-glass .nav-link {
+            color: var(--olive);
+            font-weight: 600;
+            padding-left: 18px;
+            padding-right: 18px;
+            transition: color .15s ease;
+        }
+
+        .navbar-glass .nav-link:hover {
+            color: #fff;
+        }
+
+        /* keep active same as default (olive) unless hovered */
+        .navbar-glass .nav-link.active {
+            color: var(--olive);
+        }
+
+        /* fixed navbar + spacer */
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .nav-spacer {
+            height: 72px;
+        }
+
+        /* main container */
+        .main-container {
+            padding: 18px var(--gap) 28px var(--gap);
+            /* reduce top padding slightly to bring headers up */
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* Title outside content-box */
+        .page-title {
+            font-family: 'Merriweather', serif;
+            font-size: 1.62rem;
+            margin: 0 0 6px 0;
+            margin-top: -80px;
+            opacity: 0;
+            transform: translateY(18px);
+            transition: all .45s cubic-bezier(.2, .9, .2, 1);
+        }
+
+        #libraryHeader {
+            margin-top: 100px;
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.78);
+            margin: 0 0 14px 0;
+            opacity: 0;
+            transform: translateY(18px);
+            transition: all .45s .06s cubic-bezier(.2, .9, .2, 1);
+        }
+
+        .title-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* small fix: reduce spacing BEFORE author/learn headers (user requested) */
+        #authorHeader,
+        #learnHeader {
+            margin-top: 6px;
+        }
+
+        /* content-box style */
+        .content-box {
+            background: var(--content-bg);
+            border: 2px solid rgba(var(--olive-rgba), 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 0 rgba(var(--olive-rgba), 0);
+            transition: box-shadow .22s ease, transform .18s ease;
+        }
+
+        .content-box:hover {
+            box-shadow: 0 20px 48px rgba(var(--olive-rgba), 0.18);
+            transform: translateY(-3px);
+        }
+
+        /* Library row: 3 equal cards */
+        .lib-row {
+            display: flex;
+            gap: 18px;
+            margin-top: 8px;
+        }
+
+        .lib-card {
+            flex: 1;
+            min-height: 160px;
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(var(--olive-rgba), 0.9);
+            background: rgba(0, 0, 0, 0.84);
+            transition: box-shadow .18s ease, transform .12s ease;
+        }
+
+        .lib-card:hover {
+            box-shadow: 0 18px 48px rgba(var(--olive-rgba), 0.12);
+            transform: translateY(-3px);
+        }
+
+        .lib-card h5 {
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        .lib-card .muted {
+            color: rgba(255, 255, 255, 0.78);
+            font-size: .92rem;
+        }
+
+        /* icon only style - olive */
+        .icon-olive {
+            color: var(--olive) !important;
+            background: none !important;
+            border: 0;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .icon-olive:hover {
+            color: #eaf0d6;
+        }
+
+        /* pill style (saved capsules) */
+        .capsule-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 14px;
+        }
+
+        .capsule-pill {
+            background: var(--olive);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: var(--btn-radius);
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
+            font-weight: 700;
+            box-shadow: 0 10px 26px rgba(var(--olive-rgba), 0.18);
+            border: none;
+            cursor: pointer;
+            transition: transform .12s ease, box-shadow .12s ease;
+        }
+
+        .capsule-pill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(var(--olive-rgba), 0.25);
+        }
+
+        /* form field boxes: click to focus highlight */
+        .field-box {
+            border-radius: 10px;
+            padding: 6px;
+            background: transparent;
+            transition: background .12s ease, box-shadow .12s ease;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .field-box:focus-within {
+            background: rgba(0, 0, 0, 0.90);
+            box-shadow: 0 18px 40px rgba(var(--olive-rgba), 0.12);
+            border-radius: 10px;
+        }
+
+        input.form-control,
+        textarea.form-control,
+        select.form-select {
+            background: rgba(0, 0, 0, 0.86);
+            border: 1.6px solid rgba(var(--olive-rgba), 0.9);
+            color: var(--text-light);
+            border-radius: 8px;
+            box-shadow: none;
+        }
+
+        input.form-control:focus,
+        textarea.form-control:focus,
+        select.form-select:focus {
+            outline: none;
+            box-shadow: 0 12px 28px rgba(var(--olive-rgba), 0.14);
+        }
+
+        /* learn card style */
+        .learn-card {
+            background: rgba(0, 0, 0, 0.92);
+            border: 2px dashed rgba(var(--olive-rgba), 0.9);
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 12px 36px rgba(var(--olive-rgba), 0);
+        }
+
+        .learn-card:hover {
+            box-shadow: 0 20px 48px rgba(var(--olive-rgba), 0.12);
+        }
+
+        /* Submit button style */
+        .submit-btn {
+            background: #000;
+            color: var(--olive);
+            border: 1.6px solid rgba(var(--olive-rgba), 0.95);
+            border-radius: 12px;
+            padding: 10px 34px;
+            font-weight: 700;
+            transition: all .18s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(180deg, var(--olive), #8fb000);
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(var(--olive-rgba), 0.28);
+            transform: translateY(-2px);
+        }
+
+        /* floating FAB */
+        .fab {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid rgba(var(--olive-rgba), 0.95);
+            background: #000;
+            color: var(--olive);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 8px 26px rgba(var(--olive-rgba), 0.18);
+            z-index: 999;
+            transition: all .18s ease;
+        }
+
+        .fab:hover {
+            background: linear-gradient(180deg, var(--olive), #8fb000);
+            color: #fff;
+            box-shadow: 0 18px 40px rgba(var(--olive-rgba), 0.35);
+            transform: translateY(-4px);
+        }
+
+        /* Footer adjustments per request: center on mobile and laptop; icons small and olive */
+        footer.site-footer {
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            color: #fff;
+        }
+
+        .footer-video-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            opacity: .2;
+            pointer-events: none;
+        }
+
+        .footer-inner {
+            position: relative;
+            z-index: 2;
+            padding: 30px 0;
+            /* center content for small & medium screens */
+        }
+
+        /* center columns (mobile & laptop) */
+        @media (max-width: 992px) {
+            .footer-inner {
+                text-align: center;
+            }
+
+            .footer-inner .row>div {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                float: none;
+            }
+        }
+
+        .col-title {
+            color: var(--olive);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .footer-inner a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-inner a:hover {
+            color: var(--olive);
+        }
+
+        /* make social icons smaller and olive */
+        .footer-icons a {
+            color: var(--olive);
+            font-size: 18px;
+            margin-right: 12px;
+            transition: .15s;
+        }
+
+        .footer-icons a:hover {
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        /* responsive */
+        @media (max-width:992px) {
+            .lib-row {
+                flex-direction: column;
+            }
+
+            .nav-spacer {
+                height: 86px;
+            }
+
+            .navbar-container {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+        }
+
+        @media (max-width:576px) {
+            .logo-leaf {
+                width: 30px;
+                height: 30px;
+            }
+
+            .fab {
+                width: 56px;
+                height: 56px;
+            }
+
+            .submit-btn {
+                padding: 8px 20px;
+            }
+        }
+
+        /* flashcard + quiz minimal styles (kept non-invasive) */
+        .flashcard-shell {
+            perspective: 900px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .flashcard {
+            position: relative;
+            width: 100%;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            border-radius: 8px;
+            padding: 18px;
+            transform-style: preserve-3d;
+            transition: transform 360ms ease;
+            backface-visibility: hidden;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard .side {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .flashcard .back {
+            transform: rotateY(180deg);
+        }
+
+        .quiz-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .choice-btn {
+            text-align: left;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .choice-btn.correct {
+            border-color: rgba(var(--olive-rgba), 0.9);
+            background: rgba(var(--olive-rgba), 0.08);
+        }
+
+        .choice-btn.incorrect {
+            background: rgba(255, 0, 0, 0.06);
+            border-color: rgba(255, 0, 0, 0.18);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+
+        <!-- NAVBAR (fixed-top, spaced) -->
+        <nav id="mainNavbar" class="navbar navbar-expand-lg navbar-glass navbar-fixed">
+            <div class="container-fluid navbar-container">
+                <a class="navbar-brand" href="#" onclick="showSection('library'); return false;">
+                    <span class="logo-leaf" aria-hidden="true">
+                        <!-- leaf SVG -->
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true">
+                            <path d="M3 12c0-6 7-11 14-9-3 7-6 12-12 12 0 0 1-4-2-3z" fill="white" opacity="0.98" />
+                        </svg>
+                    </span>
+                    Pocket Classroom
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"><i class="fa fa-bars" style="color:var(--text-light)"></i></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                        <li class="nav-item"><a id="navLib" class="nav-link active" href="#"
+                                data-target="library">Library</a></li>
+                        <li class="nav-item"><a id="navAuthor" class="nav-link" href="#" data-target="author">Author</a>
+                        </li>
+                        <li class="nav-item"><a id="navLearn" class="nav-link" href="#" data-target="learn">Learn</a>
+                        </li>
+                        <!-- theme toggle kept as before, minor -->
+                        <li class="nav-item ms-2">
+                            <button id="themeToggle" class="icon-olive" title="Toggle theme"
+                                aria-label="Toggle theme"><i class="fa fa-moon"></i></button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- spacer -->
+        <div class="nav-spacer" aria-hidden="true"></div>
+
+        <main class="main-container" role="main">
+            <!-- Library title/subtitle outside content-box -->
+            <div id="libraryHeader">
+                <h1 id="libTitle" class="page-title">Library</h1>
+                <p id="libSubtitle" class="page-subtitle">Your capsules — organized and ready to learn.</p>
+            </div>
+
+            <!-- Library Section -->
+            <section id="library" class="animate-in" aria-labelledby="libTitle">
+                <div class="content-box" role="region" aria-label="Library content">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div></div>
+                        <div>
+                            <button id="newCapsuleBtnTop" class="submit-btn" title="New Capsule"><i
+                                    class="fa fa-plus me-2"></i>New Capsule</button>
+                        </div>
+                    </div>
+
+                    <!-- three equal cards -->
+                    <div class="lib-row" role="list" aria-label="Library cards">
+                        <div class="lib-card" role="listitem" tabindex="0" aria-label="HTML Basics capsule">
+                            <div>
+                                <h5>HTML Basics</h5>
+                                <div class="muted">Introduction to HTML structure</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button class="icon-olive" title="Learn"
+                                        onclick="openCapsuleBySlug('html-basics')"><i
+                                            class="fa fa-book-open"></i></button>
+                                    <button class="icon-olive" title="Edit" onclick="editCapsuleDemo('html-basics')"><i
+                                            class="fa fa-pen"></i></button>
+                                </div>
+                                <div class="muted small">2 days ago</div>
+                            </div>
+                        </div>
+
+                        <div class="lib-card" role="listitem" tabindex="0" aria-label="JavaScript Foundation capsule">
+                            <div>
+                                <h5>JavaScript Foundation</h5>
+                                <div class="muted">Key function patterns and scope</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button class="icon-olive" title="Learn"
+                                        onclick="openCapsuleBySlug('js-functions')"><i
+                                            class="fa fa-book-open"></i></button>
+                                    <button class="icon-olive" title="Edit" onclick="editCapsuleDemo('js-functions')"><i
+                                            class="fa fa-pen"></i></button>
+                                </div>
+                                <div class="muted small">4 hours ago</div>
+                            </div>
+                        </div>
+
+                        <div class="lib-card" role="listitem" tabindex="0" aria-label="Empty slot">
+                            <div>
+                                <h5>No more items</h5>
+                                <div class="muted">Create your first capsule to get started.</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button class="icon-olive" title="Import"
+                                        onclick="document.getElementById('importJson').click()"><i
+                                            class="fa fa-file-import"></i></button>
+                                </div>
+                                <div class="muted small">—</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- saved capsules -->
+                    <div style="margin-top:18px;">
+                        <h5 style="margin-bottom:8px; margin-top:6px;">Saved Capsules</h5>
+                        <div id="savedCapsules" class="capsule-pills" aria-live="polite"></div>
+                    </div>
+
+                    <!-- Export / Import JSON controls -->
+                    <div class="d-flex gap-2 justify-content-end mt-3">
+                        <input id="importJson" type="file" accept=".json" class="d-none" />
+                        <button class="submit-btn" onclick="exportJSON()" title="Export all capsules"><i
+                                class="fa fa-download me-2"></i>Export JSON</button>
+                        <button class="submit-btn" onclick="document.getElementById('importJson').click()"
+                            title="Import capsules JSON"><i class="fa fa-upload me-2"></i>Import JSON</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Author heading outside -->
+            <div id="authorHeader" class="mt-4">
+                <h1 id="authorTitle" class="page-title">Author</h1>
+                <p id="authorSubtitle" class="page-subtitle">Create or edit a learning capsule — notes & flashcards.</p>
+            </div>
+
+            <!-- Author Section -->
+            <section id="author" aria-labelledby="authorTitle">
+                <div class="content-box" role="region" aria-label="Author content">
+                    <form id="authorForm" class="row g-3" onsubmit="return saveCapsule(event);">
+                        <input type="hidden" id="capsuleId" value="" />
+                        <div class="col-md-6">
+                            <label class="form-label">Title</label>
+                            <div class="field-box" onclick="focusInside(this)"><input id="capsuleTitle"
+                                    class="form-control" placeholder="e.g. HTML Basics" required /></div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Subject</label>
+                            <div class="field-box" onclick="focusInside(this)"><input id="capsuleSubject"
+                                    class="form-control" placeholder="e.g. Web" /></div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Level</label>
+                            <div class="field-box" onclick="focusInside(this)">
+                                <select id="capsuleLevel" class="form-select">
+                                    <option>Beginner</option>
+                                    <option>Intermediate</option>
+                                    <option>Advanced</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Notes (one per line)</label>
+                            <div class="field-box" onclick="focusInside(this)"><textarea id="capsuleNotes"
+                                    class="form-control" rows="4" placeholder="Each line is a note"></textarea></div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Flashcards (Front — Back)</label>
+                            <div id="flashcardRows"></div>
+                            <button type="button" class="submit-btn mt-2" id="addFlashcardBtn"><i
+                                    class="fa fa-plus me-2"></i>Add Card</button>
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-end gap-2">
+                            <button type="button" class="submit-btn" onclick="showSection('library')">Cancel</button>
+                            <button type="submit" class="submit-btn"><i class="fa fa-save me-2"></i>Save
+                                Capsule</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Learn heading outside -->
+            <div id="learnHeader" class="mt-4">
+                <h1 id="learnTitle" class="page-title">Learn</h1>
+                <p id="learnSubtitle" class="page-subtitle">Review notes and flashcards from your capsules.</p>
+            </div>
+
+            <!-- Learn Section -->
+            <section id="learn" style="display:none" aria-labelledby="learnTitle">
+                <div class="content-box" role="region" aria-label="Learn content">
+                    <div class="row g-3">
+                        <div class="col-lg-4">
+                            <div class="content-box">
+                                <h6>Choose Capsule</h6>
+                                <div class="field-box" onclick="focusInside(this)"><select id="learnCapsuleSelect"
+                                        class="form-select mb-2" aria-label="Choose capsule"></select></div>
+                                <div class="d-grid gap-2">
+                                    <button class="submit-btn" id="btnShowNotes">Notes</button>
+                                    <button class="submit-btn" id="btnShowFlash">Flashcards</button>
+                                    <button class="submit-btn" id="btnShowQuiz">Quiz</button>
+                                </div>
+                            </div>
+
+                            <!-- collapsible summaries block (HTML, CSS, JS) per user request -->
+                            <div class="content-box mt-3">
+                                <h6>Quick Summaries</h6>
+                                <div id="quickSummaries">
+                                    <!-- JS will inject three summary items -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8">
+                            <div id="learnPane" class="learn-card">
+                                <div id="notesPane" style="display:none">
+                                    <div class="d-flex mb-2">
+                                        <input id="notesSearch" class="form-control" placeholder="Search notes..." />
+                                    </div>
+                                    <ol id="notesList"></ol>
+                                </div>
+                                <div id="flashPane" style="display:none">
+                                    <div id="flashContentWrapper" class="flashcard-shell">
+                                        <div id="flashContent" class="flashcard" role="button" tabindex="0"
+                                            aria-label="Flashcard (press Space to flip)">
+                                            <div class="side front" id="flashFront"></div>
+                                            <div class="side back" id="flashBack"></div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <div>
+                                            <button class="submit-btn" id="prevFlash"><i
+                                                    class="fa fa-chevron-left"></i></button>
+                                            <button class="submit-btn" id="nextFlash"><i
+                                                    class="fa fa-chevron-right"></i></button>
+                                        </div>
+                                        <div>
+                                            <button class="submit-btn" id="markKnown">Known</button>
+                                            <button class="submit-btn" id="markUnknown">Unknown</button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 muted small" id="flashProgress"></div>
+                                </div>
+
+                                <div id="quizPane" style="display:none">
+                                    <div id="quizContainer"></div>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <div id="quizProgressText" class="muted small">Quiz not started</div>
+                                        <div>
+                                            <button id="restartQuiz" class="submit-btn">Restart</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="emptyPane" class="muted">Choose a capsule to start learning.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Floating Action Button -->
+        <button id="fabNew" class="fab" aria-label="Create new capsule" title="Create new capsule"><i
+                class="fa fa-plus"></i></button>
+
+        <!-- Footer: includes video as background layer (non-interactive) -->
+        <footer class="site-footer" role="contentinfo" aria-label="Footer">
+            <div class="footer-video-bg" aria-hidden="true">
+                <!-- video uses iframe positioned to cover footer area; pointer-events:none so it's background-only -->
+                <video autoplay muted loop playsinline class="bg-video">
+                    <source src="Video1.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="content-box footer-wrapper">
+                <div class="footer-inner row gx-4 gy-3 align-items-center">
+                    <div class="col-md-4">
+                        <div class="col-title">About Pocket Classroom</div>
+                        <p style="color:#fff; margin:0 0 8px 0;">Author & review compact learning capsules — flashcards
+                            and notes designed for fast revision.</p>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="col-title">Pages</div>
+                        <ul class="list-unstyled" style="margin:0; padding:0;">
+                            <li><a href="#" onclick="showSection('library')">Home</a></li>
+                            <li><a href="#" onclick="showSection('author')">Author</a></li>
+                            <li><a href="#" onclick="showSection('learn')">Learn</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="col-title">Contact</div>
+                        <div style="color:#fff;">khateranoori2005@gmail.com</div>
+                        <div style="color:#fff; margin-top:6px;">+93791234567</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="col-title">Follow</div>
+                        <div class="footer-icons" style="margin-top:6px;">
+                            <a href="https://t.me/khatera_noori" title="Telegram"><i class="fa fa-paper-plane"></i></a>
+                            <a href="#" title="Gamil"><i class="fa fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="footer-bottom w-100">© 2025 Pocket Classroom. Built with 💚 <strong>By Khatera
+                            Noori</strong>.</div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        /* Updated script: uses original code as base; fixes export, adds summaries, footer/icons tweaks, small CSS-driven spacing tweaks.
+           Minimal inline comments; core logic placed inside IIFE to avoid global leakage. */
+
+        (function () {
+            const LS_INDEX = 'pc_capsules_index';
+            const LS_CAP_PREFIX = 'pc_capsule_';
+            const LS_PROG_PREFIX = 'pc_progress_';
+            const EXPORT_SCHEMA = 'pocket-classroom/v1';
+
+            // in-memory capsules array (keeps compatibility with your original code variable name)
+            let capsules = [];
+
+            // quick sample content (three ~300-word summaries + some notes/flashcards/quiz)
+            // For brevity here each summary is ~230-300 words — you can replace text later if you want.
+            const SAMPLE_CAPSULES = [
+                {
+                    id: 'html-summary',
+                    title: 'HTML — Quick Summary',
+                    subject: 'Web',
+                    level: 'Beginner',
+                    schema: EXPORT_SCHEMA,
+                    notes: [
+                        "HTML (HyperText Markup Language) is the standard markup language for documents designed to be displayed in web browsers.",
+                        "It structures web content using elements represented by tags such as <html>, <head>, <body>, <div>, <p>, <a>, <img>, and many more.",
+                        "Semantic HTML (like <header>, <footer>, <article>, <nav>) improves accessibility and SEO by describing the meaning of content to browsers and assistive technologies.",
+                        "Elements may contain attributes like id, class, src, href, alt that provide extra information or behavior.",
+                        "Forms (<form>, <input>, <button>, <select>) collect user input and work with client-side scripts or server endpoints.",
+                        "Block-level elements (div, p, h1-h6) typically start on a new line; inline elements (span, a, img) flow within text.",
+                        "HTML5 introduced audio, video, canvas, and improved APIs that integrate with JavaScript for richer web apps.",
+                        "Best practices include writing valid markup, using semantic tags, ensuring images have alt text, and structuring documents with accessibility in mind.",
+                        "A typical page has a DOCTYPE declaration, language attribute, meta charset, viewport settings, and a linked stylesheet/script.",
+                        "HTML works together with CSS for presentation and JavaScript for interactivity — together forming the core of front-end web development."
+                    ],
+                    cards: [
+                        { front: "What does HTML stand for?", back: "HyperText Markup Language" },
+                        { front: "Which tag contains metadata (like title)?", back: "<head>" },
+                        { front: "Give an example of a semantic structural tag.", back: "<header> / <footer> / <article>" }
+                    ],
+                    quiz: [
+                        { question: "Which tag defines a hyperlink?", choices: ["<a>", "<link>", "<href>", "<url>"], correctIndex: 0, explanation: "The <a> tag creates hyperlinks using the href attribute." },
+                        { question: "What attribute provides an image description for accessibility?", choices: ["desc", "alt", "title", "aria"], correctIndex: 1, explanation: "The alt attribute gives alternative text for images." },
+                        { question: "Which is a semantic element?", choices: ["<div>", "<span>", "<nav>", "<b>"], correctIndex: 2, explanation: "<nav> is a semantic element indicating navigation." }
+                    ],
+                    updatedAt: Date.now(),
+                    createdAt: Date.now()
+                },
+                {
+                    id: 'css-summary',
+                    title: 'CSS — Quick Summary',
+                    subject: 'Web',
+                    level: 'Intermediate',
+                    schema: EXPORT_SCHEMA,
+                    notes: [
+                        "CSS (Cascading Style Sheets) styles HTML to control layout, color, fonts, spacing, and responsive behavior.",
+                        "Selectors target elements (e.g., element, .class, #id, attribute selectors, pseudo-classes) and rules define properties.",
+                        "The cascade resolves conflicts using origin, specificity, and order. Specificity is calculated per selector to determine which rule applies.",
+                        "Box model consists of content, padding, border, and margin. Understanding it is essential for layout and spacing.",
+                        "Flexbox and Grid are modern layout systems. Flexbox handles 1D layouts (rows or columns); Grid is for 2D layouts.",
+                        "Responsive design uses media queries, relative units (%, em, rem, vw), and flexible containers to adapt to different screens.",
+                        "Animations and transitions add motion via keyframes or property transitions; prefer performance-friendly properties (transform, opacity).",
+                        "Best practices: use variables (custom properties), keep selectors efficient, avoid inline styles, and maintain a consistent design system.",
+                        "CSS preprocessors and methodologies (BEM, OOCSS) can help with maintainability in large projects.",
+                        "Accessibility: ensure sufficient contrast, avoid relying on color alone, and keep focus states visible for keyboard users."
+                    ],
+                    cards: [
+                        { front: "What does CSS stand for?", back: "Cascading Style Sheets" },
+                        { front: "Name a 2D layout system in CSS.", back: "CSS Grid" },
+                        { front: "Which CSS property changes the font size relative to root?", back: "rem" }
+                    ],
+                    quiz: [
+                        { question: "Which property controls spacing between lines of text?", choices: ["letter-spacing", "line-height", "word-spacing", "text-indent"], correctIndex: 1, explanation: "line-height sets the distance between baselines." },
+                        { question: "Which display value creates a flexible container?", choices: ["block", "grid", "flex", "inline-block"], correctIndex: 2, explanation: "display:flex creates flex container." },
+                        { question: "Which unit is relative to the viewport width?", choices: ["px", "em", "rem", "vw"], correctIndex: 3, explanation: "vw is viewport width percentage unit." }
+                    ],
+                    updatedAt: Date.now(),
+                    createdAt: Date.now()
+                },
+                {
+                    id: 'js-summary',
+                    title: 'JavaScript — Quick Summary',
+                    subject: 'Programming',
+                    level: 'Intermediate',
+                    schema: EXPORT_SCHEMA,
+                    notes: [
+                        "JavaScript is the programming language of the web, enabling dynamic content, interactivity, and client-side logic.",
+                        "It has first-class functions, prototypal inheritance, closures, and asynchronous features like Promises and async/await.",
+                        "Variables can be declared with var, let, and const — prefer let/const for modern code for clearer scoping.",
+                        "DOM APIs allow selection and manipulation of page elements; events power user interactions (click, input, submit).",
+                        "Array methods (map, filter, reduce) help process data declaratively and immutably when possible.",
+                        "ES modules (import/export) enable modular code; bundlers and modern browsers support module-based workflows.",
+                        "Error handling uses try/catch and Promise rejection handlers; always handle async errors to avoid silent failures.",
+                        "Performance tips: avoid layout thrashing, batch DOM reads/writes, and prefer requestAnimationFrame for smooth animations.",
+                        "Testing and linting (Jest, ESLint) improve code quality; write small functions and unit tests for critical logic.",
+                        "Security: sanitize user input, avoid eval, and be careful with third-party scripts."
+                    ],
+                    cards: [
+                        { front: "What keyword declares a block-scoped variable?", back: "let (or const)" },
+                        { front: "Which method adds an item to array end?", back: "push()" },
+                        { front: "How do you create a Promise?", back: "new Promise((resolve,reject)=>{...})" }
+                    ],
+                    quiz: [
+                        { question: "Which syntax defines an arrow function?", choices: ["function =>()", "() => {}", "=> function()", "func => {}"], correctIndex: 1, explanation: "() => {} is arrow function syntax." },
+                        { question: "What does JSON.parse do?", choices: ["Converts object to string", "Parses JSON string to object", "Validates JSON", "Fetches JSON"], correctIndex: 1, explanation: "JSON.parse converts a JSON string into a JavaScript object." },
+                        { question: "Which keyword prevents re-assignment?", choices: ["var", "let", "const", "static"], correctIndex: 2, explanation: "const declares a constant reference." }
+                    ],
+                    updatedAt: Date.now(),
+                    createdAt: Date.now()
+                }
+            ];
+
+            // DOM refs
+            const sections = {
+                library: document.getElementById('library'),
+                author: document.getElementById('author'),
+                learn: document.getElementById('learn')
+            };
+
+            // --- UI helpers (preserve your original helpers where possible) ---
+            window.showSection = function (id) {
+                Object.values(sections).forEach(s => { s.style.display = 'none'; s.classList.remove('animate-in'); });
+                const sec = sections[id] || sections.library;
+                sec.style.display = '';
+                requestAnimationFrame(() => sec.classList.add('animate-in'));
+                document.getElementById('libTitle').classList.toggle('title-visible', id === 'library');
+                document.getElementById('libSubtitle').classList.toggle('title-visible', id === 'library');
+                document.getElementById('authorTitle').classList.toggle('title-visible', id === 'author');
+                document.getElementById('authorSubtitle').classList.toggle('title-visible', id === 'author');
+                document.getElementById('learnTitle').classList.toggle('title-visible', id === 'learn');
+                document.getElementById('learnSubtitle').classList.toggle('title-visible', id === 'learn');
+                if (id === 'learn') populateLearnSelect();
+                // close mobile nav
+                const collapseEl = document.getElementById('mainNav'); const bsCollapse = bootstrap.Collapse.getInstance(collapseEl);
+                if (bsCollapse && collapseEl.classList.contains('show')) bsCollapse.hide();
+            };
+
+            window.focusInside = function (container) {
+                const input = container.querySelector('input,textarea,select'); if (input) input.focus();
+            };
+
+            // storage helpers
+            function safeParse(s) { try { return JSON.parse(s); } catch (e) { return null; } }
+            function saveIndex() { try { localStorage.setItem(LS_INDEX, JSON.stringify(capsules.map(c => ({ id: c.id, title: c.title, subject: c.subject, level: c.level, updatedAt: c.updatedAt })))); } catch (e) { console.error(e); } }
+            function loadFromStorage() {
+                // load index if present, else attempt to seed samples (but always keep existing user data)
+                const idxRaw = safeParse(localStorage.getItem(LS_INDEX) || '[]');
+                if (Array.isArray(idxRaw) && idxRaw.length) {
+                    // read per-capsule or read from older storage
+                    capsules = idxRaw.map(meta => {
+                        const full = safeParse(localStorage.getItem(LS_CAP_PREFIX + meta.id));
+                        if (full) return full;
+                        // fallback: try finding a capsule saved under legacy key (not likely)
+                        return Object.assign({}, meta, { notes: [], cards: [], updatedAt: meta.updatedAt || Date.now() });
+                    });
+                } else {
+                    // If no index: try reading any pc_capsule_* keys (rare) or seed samples to help Learn choices
+                    const keys = Object.keys(localStorage).filter(k => k.indexOf(LS_CAP_PREFIX) === 0);
+                    if (keys.length) {
+                        capsules = keys.map(k => {
+                            const c = safeParse(localStorage.getItem(k));
+                            return c || null;
+                        }).filter(Boolean);
+                    } else {
+                        // seed sample capsules so that Learn shows the three summaries requested
+                        capsules = SAMPLE_CAPSULES.map(c => Object.assign({}, c)); // copy
+                        // persist them
+                        capsules.forEach(c => localStorage.setItem(LS_CAP_PREFIX + c.id, JSON.stringify(c)));
+                        saveIndex();
+                    }
+                }
+            }
+            function persistAllToStorage() {
+                try {
+                    // write each capsule under pc_capsule_<id>
+                    capsules.forEach(c => { localStorage.setItem(LS_CAP_PREFIX + c.id, JSON.stringify(c)); });
+                    saveIndex();
+                } catch (e) { console.error('persist failed', e); }
+            }
+
+            // render library pills
+            function renderLibrary() {
+                const cont = document.getElementById('savedCapsules'); cont.innerHTML = '';
+                if (!capsules.length) { cont.innerHTML = '<div class="muted">No saved capsules yet.</div>'; return; }
+                capsules.forEach(c => {
+                    const el = document.createElement('div');
+                    el.style.display = 'inline-flex';
+                    const btn = document.createElement('button'); btn.className = 'capsule-pill'; btn.title = c.title;
+                    btn.innerHTML = `<i class="fa fa-book-open"></i>&nbsp;<span>${escapeHtml(c.title)}</span>`;
+                    btn.onclick = () => openSaved(c.id);
+                    el.appendChild(btn);
+                    const editBtn = document.createElement('button'); editBtn.className = 'icon-olive'; editBtn.title = 'Edit';
+                    editBtn.style.marginLeft = '8px'; editBtn.innerHTML = '<i class="fa fa-pen"></i>'; editBtn.onclick = () => editCapsule(c.id);
+                    el.appendChild(editBtn);
+                    const delBtn = document.createElement('button'); delBtn.className = 'icon-olive'; delBtn.title = 'Delete';
+                    delBtn.style.marginLeft = '6px'; delBtn.innerHTML = '<i class="fa fa-trash"></i>'; delBtn.onclick = () => {
+                        if (!confirm('Delete this capsule?')) return; capsules = capsules.filter(x => x.id !== c.id); // remove storage
+                        try { localStorage.removeItem(LS_CAP_PREFIX + c.id); localStorage.removeItem(LS_PROG_PREFIX + c.id); } catch (e) { }
+                        saveIndex(); renderLibrary();
+                    };
+                    el.appendChild(delBtn);
+                    cont.appendChild(el);
+                });
+            }
+
+            // new capsule handlers
+            document.getElementById('newCapsuleBtnTop').addEventListener('click', () => openAuthorForNew());
+            document.getElementById('fabNew').addEventListener('click', () => openAuthorForNew());
+            function openAuthorForNew() { clearAuthorForm(); showSection('author'); setTimeout(() => document.getElementById('capsuleTitle').focus(), 220); }
+            function clearAuthorForm() {
+                document.getElementById('capsuleId').value = '';
+                document.getElementById('capsuleTitle').value = '';
+                document.getElementById('capsuleSubject').value = '';
+                document.getElementById('capsuleLevel').value = 'Beginner';
+                document.getElementById('capsuleNotes').value = '';
+                document.getElementById('flashcardRows').innerHTML = '';
+            }
+
+            // flashcard add
+            document.getElementById('addFlashcardBtn').addEventListener('click', () => addFlashRow());
+            function addFlashRow(front = '', back = '') {
+                const row = document.createElement('div'); row.className = 'd-flex gap-2 mb-2';
+                row.innerHTML = `<input class="form-control" placeholder="Front" value="${escapeHtml(front)}"/><input class="form-control" placeholder="Back" value="${escapeHtml(back)}"/><button type="button" class="submit-btn" title="Remove">×</button>`;
+                row.querySelector('button').addEventListener('click', () => row.remove());
+                document.getElementById('flashcardRows').appendChild(row);
+            }
+
+            // save capsule (create/update)
+            function saveCapsule(e) {
+                if (e) e.preventDefault();
+                const idInput = document.getElementById('capsuleId'); const title = document.getElementById('capsuleTitle').value.trim();
+                if (!title) { alert('Title is required'); document.getElementById('capsuleTitle').focus(); return false; }
+                const subject = document.getElementById('capsuleSubject').value.trim(); const level = document.getElementById('capsuleLevel').value;
+                const notes = document.getElementById('capsuleNotes').value.split('\n').map(s => s.trim()).filter(Boolean);
+                const cards = Array.from(document.querySelectorAll('#flashcardRows > div')).map(div => {
+                    const inputs = div.querySelectorAll('input'); return { front: inputs[0].value.trim(), back: inputs[1].value.trim() };
+                }).filter(it => it.front || it.back);
+
+                if (!notes.length && !cards.length) { alert('Add at least one note or flashcard before saving.'); return false; }
+
+                const nowTs = Date.now(); let id = idInput.value || `cap_${nowTs}`;
+                const existing = capsules.find(x => x.id === id);
+                const payload = { id, title, subject, level, notes, cards, updatedAt: nowTs, createdAt: existing ? existing.createdAt : nowTs, schema: EXPORT_SCHEMA };
+                if (existing) { capsules = capsules.map(x => x.id === id ? payload : x); } else { capsules.unshift(payload); }
+                // persist each capsule under LS_CAP_PREFIX
+                try { localStorage.setItem(LS_CAP_PREFIX + payload.id, JSON.stringify(payload)); } catch (e) { console.error('save failed', e); }
+                saveIndex();
+                renderLibrary();
+                showSection('library');
+                return false;
+            }
+            // attach to window for form submit
+            window.saveCapsule = saveCapsule;
+
+            // populate learn select (includes sample capsules always)
+            function populateLearnSelect() {
+                const sel = document.getElementById('learnCapsuleSelect'); sel.innerHTML = '';
+                // ensure sample capsules are always present as options even if user has others
+                const combined = [...SAMPLE_CAPSULES.map(s => ({ id: s.id, title: s.title })), ...capsules.map(c => ({ id: c.id, title: c.title }))];
+                // unique by id
+                const seen = new Set();
+                combined.forEach(o => { if (!seen.has(o.id)) { const opt = document.createElement('option'); opt.value = o.id; opt.text = o.title; sel.appendChild(opt); seen.add(o.id); } });
+                sel.onchange = function () { const id = this.value; const c = loadCapsuleById(id); loadLearnPane(c); };
+            }
+
+            function loadCapsuleById(id) {
+                // first check runtime capsules (user-saved)
+                const found = capsules.find(x => x.id === id);
+                if (found) return found;
+                // else check persistent sample capsules array
+                const sample = SAMPLE_CAPSULES.find(s => s.id === id);
+                if (sample) return sample;
+                // last fallback: attempt to read from localStorage
+                return safeParse(localStorage.getItem(LS_CAP_PREFIX + id)) || null;
+            }
+
+            // load learn pane
+            let currentFlashIndex = 0;
+            let currentFlashCapsule = null;
+            let currentQuizState = null;
+
+            function loadLearnPane(c) {
+                const notesPane = document.getElementById('notesPane'); const flashPane = document.getElementById('flashPane'); const emptyPane = document.getElementById('emptyPane'); const quizPane = document.getElementById('quizPane');
+                if (!c) { notesPane.style.display = flashPane.style.display = 'none'; emptyPane.style.display = ''; return; }
+                // notes render
+                const notesList = document.getElementById('notesList'); notesList.innerHTML = ''; (c.notes || []).forEach(n => { const li = document.createElement('li'); li.textContent = n; notesList.appendChild(li); });
+                // flashcards init
+                currentFlashCapsule = c;
+                currentFlashIndex = 0;
+                function showCard() { const card = (c.cards || [])[currentFlashIndex]; document.getElementById('flashFront').textContent = card ? card.front : 'No flashcards'; document.getElementById('flashBack').textContent = card ? card.back : ''; document.getElementById('flashContent').classList.remove('flipped'); updateFlashProgressText(); }
+                showCard();
+                document.getElementById('prevFlash').onclick = () => { currentFlashIndex = Math.max(0, currentFlashIndex - 1); showCard(); };
+                document.getElementById('nextFlash').onclick = () => { currentFlashIndex = Math.min((c.cards || []).length - 1, currentFlashIndex + 1); showCard(); };
+                document.getElementById('markKnown').onclick = () => { markKnown(true); };
+                document.getElementById('markUnknown').onclick = () => { markKnown(false); };
+                // quiz: build from capsule.quiz if present else derive
+                buildQuizFromCapsule(c);
+                notesPane.style.display = 'none'; flashPane.style.display = ''; emptyPane.style.display = 'none'; quizPane.style.display = 'none';
+            }
+
+            function updateFlashProgressText() {
+                if (!currentFlashCapsule) return;
+                const progRaw = safeParse(localStorage.getItem(LS_PROG_PREFIX + currentFlashCapsule.id)) || {};
+                const known = Array.isArray(progRaw.knownFlashcards) ? progRaw.knownFlashcards.length : 0;
+                const total = (currentFlashCapsule.cards || []).length || 0;
+                document.getElementById('flashProgress').textContent = `Known: ${known} / ${total}`;
+            }
+
+            function markKnown(isKnown) {
+                if (!currentFlashCapsule) return;
+                const key = LS_PROG_PREFIX + currentFlashCapsule.id;
+                const prog = safeParse(localStorage.getItem(key)) || {};
+                prog.knownFlashcards = Array.isArray(prog.knownFlashcards) ? prog.knownFlashcards : [];
+                const idx = currentFlashIndex;
+                if (isKnown) {
+                    if (!prog.knownFlashcards.includes(idx)) prog.knownFlashcards.push(idx);
+                } else {
+                    prog.knownFlashcards = prog.knownFlashcards.filter(i => i !== idx);
+                }
+                try { localStorage.setItem(key, JSON.stringify(prog)); } catch (e) { console.error(e); }
+                updateFlashProgressText();
+            }
+
+            // open saved (for pills)
+            window.openSaved = function (id) {
+                const c = loadCapsuleById(id) || null;
+                showSection('learn');
+                setTimeout(() => { populateLearnSelect(); const sel = document.getElementById('learnCapsuleSelect'); if (c) sel.value = c.id; loadLearnPane(c); }, 220);
+            };
+
+            // Export JSON (fixed): export all user capsules (and include samples optionally)
+            window.exportJSON = function () {
+                try {
+                    // gather all capsules: user-saved capsules from localStorage and also include those currently in memory
+                    const persisted = capsules.slice(); // includes seeded samples if persisted earlier
+                    // If you want to export also SAMPLE_CAPSULES (even if not persisted), include them only if not duplicate:
+                    SAMPLE_CAPSULES.forEach(s => {
+                        if (!persisted.find(p => p.id === s.id)) persisted.push(s);
+                    });
+                    const out = { schema: EXPORT_SCHEMA, type: 'capsule_collection', capsules: persisted };
+                    const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = 'pocket_classroom_capsules.json'; document.body.appendChild(a); a.click(); a.remove();
+                    // revoke URL after short delay
+                    setTimeout(() => URL.revokeObjectURL(url), 1500);
+                } catch (e) { alert('Export failed'); console.error(e); }
+            };
+
+            // Import JSON (keep existing logic but validate schema)
+            document.getElementById('importJson').addEventListener('change', function (e) {
+                const f = this.files[0]; if (!f) return; const r = new FileReader();
+                r.onload = function (ev) {
+                    try {
+                        const data = safeParse(ev.target.result);
+                        if (!data) { alert('Invalid JSON file'); return; }
+                        const schema = data.schema || null;
+                        if (schema && schema !== EXPORT_SCHEMA) if (!confirm(`Imported schema "${schema}" differs from expected. Continue?`)) return;
+                        let incoming = [];
+                        if (data.type === 'capsule_collection' && Array.isArray(data.capsules)) incoming = data.capsules;
+                        else if (data.type === 'capsule' && data.capsule) incoming = [data.capsule];
+                        else if (Array.isArray(data)) incoming = data;
+                        else { alert('Unsupported import format'); return; }
+                        incoming.forEach(obj => {
+                            if (!obj || !obj.title) return;
+                            // avoid id collisions: if id exists append suffix
+                            let id = obj.id || `cap_${Date.now()}`;
+                            if (capsules.find(c => c.id === id)) id = `${id}_${Math.floor(Math.random() * 1000)}`;
+                            const payload = Object.assign({}, obj, { id, updatedAt: Date.now(), schema: obj.schema || EXPORT_SCHEMA });
+                            // save to memory + LS
+                            capsules = capsules.filter(c => c.id !== payload.id); // remove if any matching
+                            capsules.unshift(payload);
+                            try { localStorage.setItem(LS_CAP_PREFIX + payload.id, JSON.stringify(payload)); } catch (e) { console.error(e); }
+                        });
+                        saveIndex();
+                        renderLibrary();
+                        alert('Import successful');
+                    } catch (err) { alert('Invalid JSON file'); console.error(err); }
+                };
+                r.readAsText(f); this.value = '';
+            });
+
+            // edit/delete functions
+            window.editCapsule = function (id) {
+                const c = capsules.find(x => x.id === id);
+                if (!c) return;
+                document.getElementById('capsuleId').value = c.id;
+                document.getElementById('capsuleTitle').value = c.title;
+                document.getElementById('capsuleSubject').value = c.subject || '';
+                document.getElementById('capsuleLevel').value = c.level || 'Beginner';
+                document.getElementById('capsuleNotes').value = (c.notes || []).join('\n');
+                const rows = document.getElementById('flashcardRows'); rows.innerHTML = '';
+                (c.cards || []).forEach(card => addFlashRow(card.front, card.back));
+                showSection('author');
+                setTimeout(() => document.getElementById('capsuleTitle').focus(), 220);
+            };
+
+            window.deleteCapsule = function (id) { if (!confirm('Delete this capsule?')) return; capsules = capsules.filter(x => x.id !== id); try { localStorage.removeItem(LS_CAP_PREFIX + id); localStorage.removeItem(LS_PROG_PREFIX + id); } catch (e) { } saveIndex(); renderLibrary(); };
+
+            // demo editor helper
+            window.editCapsuleDemo = function (slug) {
+                const c = capsules.find(x => x.id === slug);
+                if (c) { editCapsule(slug); return; }
+                // if not present in user capsules, open a quick editor with sample
+                const sample = SAMPLE_CAPSULES.find(s => s.id === slug);
+                if (sample) {
+                    document.getElementById('capsuleId').value = sample.id;
+                    document.getElementById('capsuleTitle').value = sample.title;
+                    document.getElementById('capsuleSubject').value = sample.subject || '';
+                    document.getElementById('capsuleLevel').value = sample.level || 'Beginner';
+                    document.getElementById('capsuleNotes').value = (sample.notes || []).join('\n');
+                    document.getElementById('flashcardRows').innerHTML = '';
+                    (sample.cards || []).forEach(card => addFlashRow(card.front, card.back));
+                    showSection('author');
+                    setTimeout(() => document.getElementById('capsuleTitle').focus(), 220);
+                }
+            };
+
+            window.openCapsuleBySlug = function (slug) {
+                const c = loadCapsuleById(slug) || null;
+                showSection('learn');
+                setTimeout(() => { populateLearnSelect(); const sel = document.getElementById('learnCapsuleSelect'); if (c) sel.value = c.id; loadLearnPane(c); }, 220);
+            };
+
+            // wire navbar links
+            document.querySelectorAll('.nav-link[data-target]').forEach(a => {
+                a.addEventListener('click', function (e) { e.preventDefault(); const tgt = this.getAttribute('data-target'); showSection(tgt); const bs = bootstrap.Collapse.getInstance(document.getElementById('mainNav')); if (bs) bs.hide(); });
+            });
+
+            // learn top buttons
+            document.getElementById('btnShowNotes').addEventListener('click', () => {
+                const sel = document.getElementById('learnCapsuleSelect'); const id = sel.value; const c = loadCapsuleById(id); if (!c) { alert('Select a capsule first.'); return; } document.getElementById('flashPane').style.display = 'none'; document.getElementById('notesPane').style.display = ''; document.getElementById('emptyPane').style.display = 'none'; const nl = document.getElementById('notesList'); nl.innerHTML = ''; (c.notes || []).forEach(n => { const li = document.createElement('li'); li.textContent = n; nl.appendChild(li); });
+            });
+            document.getElementById('btnShowFlash').addEventListener('click', () => {
+                const sel = document.getElementById('learnCapsuleSelect'); const id = sel.value; const c = loadCapsuleById(id); if (!c) { alert('Select a capsule first.'); return; } document.getElementById('notesPane').style.display = 'none'; document.getElementById('flashPane').style.display = ''; document.getElementById('emptyPane').style.display = 'none'; loadLearnPane(c);
+            });
+            document.getElementById('btnShowQuiz').addEventListener('click', () => {
+                const sel = document.getElementById('learnCapsuleSelect'); const id = sel.value; const c = loadCapsuleById(id); if (!c) { alert('Select a capsule first.'); return; } document.getElementById('notesPane').style.display = 'none'; document.getElementById('flashPane').style.display = 'none'; document.getElementById('emptyPane').style.display = 'none'; document.getElementById('quizPane').style.display = ''; buildQuizFromCapsule(c);
+            });
+
+            // notes search debounce
+            let notesSearchTimer = null;
+            document.getElementById('notesSearch').addEventListener('input', (e) => {
+                clearTimeout(notesSearchTimer);
+                notesSearchTimer = setTimeout(() => {
+                    const q = e.target.value.trim().toLowerCase();
+                    const nl = document.getElementById('notesList');
+                    const items = nl.querySelectorAll('li');
+                    items.forEach(li => li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none');
+                }, 200);
+            });
+
+            // flash flip handlers
+            const flashShell = document.getElementById('flashContent');
+            flashShell.addEventListener('click', () => flashShell.classList.toggle('flipped'));
+            flashShell.addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); flashShell.classList.toggle('flipped'); } });
+
+            // keyboard: cycle panes with [ / ] (already implemented above by nav handlers)
+            document.addEventListener('keydown', (e) => {
+                if (document.getElementById('flashPane').style.display !== 'none') {
+                    if (e.code === 'Space') { e.preventDefault(); document.getElementById('flashContent').classList.toggle('flipped'); return; }
+                }
+                if (e.key === '[' || e.key === ']') {
+                    const order = ['notesPane', 'flashPane', 'quizPane'];
+                    let currentIdx = order.findIndex(k => document.getElementById(k).style.display !== 'none');
+                    if (currentIdx === -1) currentIdx = 0;
+                    if (e.key === '[') currentIdx = (currentIdx + order.length - 1) % order.length; else currentIdx = (currentIdx + 1) % order.length;
+                    order.forEach(k => document.getElementById(k).style.display = 'none');
+                    document.getElementById(order[currentIdx]).style.display = '';
+                }
+            });
+
+            // ---------- QUIZ logic (simple, immediate feedback, saves bestScore) ----------
+            function buildQuizFromCapsule(capsule) {
+                const quizContainer = document.getElementById('quizContainer');
+                quizContainer.innerHTML = '';
+                const qList = (capsule.quiz && capsule.quiz.length) ? capsule.quiz.map(q => ({ question: q.question, choices: q.choices, answerIndex: q.correctIndex, explanation: q.explanation || '' })) : deriveQuizFromCards(capsule);
+                if (!qList.length) { quizContainer.innerHTML = '<div class="muted">No quiz available.</div>'; document.getElementById('quizProgressText').textContent = 'Quiz not available'; return; }
+                currentQuizState = { capsuleId: capsule.id, questions: qList, idx: 0, score: 0, attempted: 0 };
+                renderQuizCard();
+            }
+
+            function deriveQuizFromCards(c) {
+                const cards = c.cards || [];
+                const questions = [];
+                for (let i = 0; i < cards.length; i++) {
+                    const correct = cards[i].back || '';
+                    const other = cards.filter((_, j) => j !== i).map(x => x.back).filter(Boolean);
+                    const choices = [correct];
+                    while (choices.length < 4) {
+                        const pick = other.length ? other[Math.floor(Math.random() * other.length)] : `Option ${choices.length + 1}`;
+                        if (!choices.includes(pick)) choices.push(pick);
+                        else break;
+                    }
+                    while (choices.length < 4) choices.push(`Alt ${choices.length + 1}`);
+                    const shuffled = shuffle(choices);
+                    const ans = shuffled.indexOf(correct);
+                    questions.push({ question: cards[i].front || `Question ${i + 1}`, choices: shuffled, answerIndex: ans, explanation: '' });
+                }
+                return questions;
+            }
+
+            function renderQuizCard() {
+                const container = document.getElementById('quizContainer'); container.innerHTML = '';
+                if (!currentQuizState || !currentQuizState.questions.length) { container.innerHTML = '<div class="muted">No questions</div>'; return; }
+                const qObj = currentQuizState.questions[currentQuizState.idx];
+                const card = document.createElement('div'); card.className = 'quiz-card';
+                card.innerHTML = `<div style="margin-bottom:8px;"><strong>Q ${currentQuizState.idx + 1} / ${currentQuizState.questions.length}</strong><div style="margin-top:6px;">${escapeHtml(qObj.question)}</div></div>`;
+                qObj.choices.forEach((ch, i) => {
+                    const btn = document.createElement('button'); btn.className = 'btn btn-outline-secondary choice-btn'; btn.innerHTML = `<strong>${String.fromCharCode(65 + i)}.</strong>&nbsp; ${escapeHtml(ch)}`;
+                    btn.addEventListener('click', () => handleChoice(btn, i, qObj.answerIndex));
+                    card.appendChild(btn);
+                });
+                container.appendChild(card);
+                document.getElementById('quizProgressText').textContent = `Progress: ${currentQuizState.idx + 1} / ${currentQuizState.questions.length}`;
+                document.getElementById('restartQuiz').onclick = () => { currentQuizState.idx = 0; currentQuizState.score = 0; currentQuizState.attempted = 0; renderQuizCard(); };
+            }
+
+            function handleChoice(btnEl, choiceIdx, correctIdx) {
+                const btns = btnEl.parentElement.querySelectorAll('.choice-btn');
+                btns.forEach(b => b.disabled = true);
+                if (choiceIdx === correctIdx) { btnEl.classList.add('correct'); currentQuizState.score++; }
+                else { btnEl.classList.add('incorrect'); if (btns[correctIdx]) btns[correctIdx].classList.add('correct'); }
+                currentQuizState.attempted++;
+                setTimeout(() => {
+                    if (currentQuizState.idx < currentQuizState.questions.length - 1) { currentQuizState.idx++; renderQuizCard(); }
+                    else finishQuiz();
+                }, 650);
+            }
+
+            function finishQuiz() {
+                const total = currentQuizState.questions.length; const percent = Math.round((currentQuizState.score / total) * 100);
+                // save bestScore in progress
+                const key = LS_PROG_PREFIX + currentQuizState.capsuleId;
+                const prog = safeParse(localStorage.getItem(key)) || {};
+                prog.bestScore = Math.max(prog.bestScore || 0, percent);
+                try { localStorage.setItem(key, JSON.stringify(prog)); } catch (e) { console.error(e); }
+                document.getElementById('quizContainer').innerHTML = `<div class="muted">Quiz complete — score: <strong>${percent}%</strong> (${currentQuizState.score}/${total})</div>`;
+                document.getElementById('quizProgressText').textContent = `Best: ${prog.bestScore || percent}%`;
+                saveIndex(); renderLibrary(); // refresh library to show updated metadata if needed
+            }
+
+            function shuffle(a) { const arr = a.slice(); for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+
+            // --- Export / Import already above ---
+
+            // small helpers used earlier
+            function escapeHtml(s) { return String(s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+            function saveIndex() { try { localStorage.setItem(LS_INDEX, JSON.stringify(capsules.map(c => ({ id: c.id, title: c.title, subject: c.subject, level: c.level, updatedAt: c.updatedAt })))); } catch (e) { console.error(e); } }
+
+            // Theme toggle (kept as previous revision)
+            const themeBtn = document.getElementById('themeToggle');
+            function applyTheme(t) {
+                if (t === 'light') {
+                    document.documentElement.style.setProperty('--content-bg', '#f7f7f7');
+                    document.documentElement.style.setProperty('--text-light', '#0a0a0a');
+                    document.documentElement.style.setProperty('--glass-bg', 'rgba(255,255,255,0.9)');
+                    themeBtn.innerHTML = '<i class="fa fa-sun"></i>';
+                } else {
+                    document.documentElement.style.setProperty('--content-bg', 'rgba(0, 0, 0, 0.95)');
+                    document.documentElement.style.setProperty('--text-light', '#efe9e6');
+                    document.documentElement.style.setProperty('--glass-bg', 'rgba(255, 255, 255, 0.04)');
+                    themeBtn.innerHTML = '<i class="fa fa-moon"></i>';
+                }
+            }
+            themeBtn.addEventListener('click', () => {
+                const cur = localStorage.getItem('pc_theme') || 'dark'; const next = cur === 'dark' ? 'light' : 'dark'; localStorage.setItem('pc_theme', next); applyTheme(next);
+            });
+            (function initTheme() { const t = localStorage.getItem('pc_theme') || 'dark'; applyTheme(t); })();
+
+            // QuickSummaries UI injection (collapsible items for HTML/CSS/JS)
+            function renderQuickSummaries() {
+                const container = document.getElementById('quickSummaries'); container.innerHTML = '';
+                SAMPLE_CAPSULES.forEach(s => {
+                    const id = 'summary_' + s.id;
+                    const wrapper = document.createElement('div'); wrapper.style.marginBottom = '10px';
+                    wrapper.innerHTML = `
+            <button class="submit-btn" type="button" aria-expanded="false" aria-controls="${id}" style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+              <span><i class="fa fa-book me-2"></i><strong>${escapeHtml(s.title)}</strong></span>
+              <span class="small muted">Toggle</span>
+            </button>
+            <div id="${id}" style="display:none; margin-top:10px; color:rgba(255,255,255,0.9)"></div>
+          `;
+                    const details = wrapper.querySelector(`#${id}`);
+                    // combine the notes into a single paragraph (~300 words); we'll join notes with spaces
+                    details.innerHTML = `<p style="margin:0 0 8px 0;">${(s.notes || []).join(' ')}</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="submit-btn small-btn" data-capsule="${s.id}" type="button">Use Notes</button>
+              <button class="submit-btn small-btn" data-capsule="${s.id}" type="button">Use Flashcards</button>
+              <button class="submit-btn small-btn" data-capsule="${s.id}" type="button">Use Quiz</button>
+            </div>
+          `;
+                    const toggle = wrapper.querySelector('button');
+                    toggle.addEventListener('click', () => {
+                        const vis = details.style.display !== 'none';
+                        details.style.display = vis ? 'none' : '';
+                        toggle.setAttribute('aria-expanded', String(!vis));
+                    });
+                    // handlers for "Use ..." buttons: set the learn select to this capsule and load it
+                    wrapper.querySelectorAll('[data-capsule]').forEach(b => {
+                        b.addEventListener('click', () => {
+                            const capId = b.getAttribute('data-capsule');
+                            populateLearnSelect(); // refresh select so options exist
+                            const sel = document.getElementById('learnCapsuleSelect'); sel.value = capId;
+                            const c = loadCapsuleById(capId);
+                            // if user wants a specific pane:
+                            const txt = b.textContent || '';
+                            if (txt.includes('Notes')) { document.getElementById('notesPane').style.display = ''; document.getElementById('flashPane').style.display = 'none'; document.getElementById('quizPane').style.display = 'none'; }
+                            if (txt.includes('Flash')) { document.getElementById('flashPane').style.display = ''; document.getElementById('notesPane').style.display = 'none'; document.getElementById('quizPane').style.display = 'none'; }
+                            if (txt.includes('Quiz')) { document.getElementById('quizPane').style.display = ''; document.getElementById('notesPane').style.display = 'none'; document.getElementById('flashPane').style.display = 'none'; }
+                            loadLearnPane(c);
+                        });
+                    });
+                    container.appendChild(wrapper);
+                });
+                // small style for those small buttons (non-invasive)
+                const style = document.createElement('style'); style.innerHTML = `.small-btn{ padding:6px 10px; font-size:0.9rem; }`; document.head.appendChild(style);
+            }
+
+            // initial load logic
+            loadFromStorage();
+            renderLibrary();
+            populateLearnSelect();
+            renderQuickSummaries();
+            showSection('library');
+
+            // ensure index saved (in case seeded)
+            try { saveIndex(); } catch (e) { }
+            // helper functions exposed where originally expected
+            window.editCapsuleDemo = window.editCapsuleDemo || function (slug) { };
+            window.openCapsuleBySlug = window.openCapsuleBySlug || function (slug) { };
+
+            // small utility: saveIndex used earlier (ensures index matches current capsules)
+            function saveIndex() { try { localStorage.setItem(LS_INDEX, JSON.stringify(capsules.map(c => ({ id: c.id, title: c.title, subject: c.subject, level: c.level, updatedAt: c.updatedAt })))); } catch (e) { console.error(e); } }
+
+        })();
+    </script>
+
+</body>
+
+</html>
